@@ -1,6 +1,8 @@
 #include <stdint.h>
 
-uint8_t memory[128];
+const uint MEMSIZE = 128;
+
+uint8_t memory[MEMSIZE];
 
 struct c6502 {
     //bus
@@ -16,7 +18,16 @@ struct c6502 {
     uint8_t  stackPointer;
 };
 
-// Basic Functions
-
+// Basic CPU Functions
 void cpuRun   (c6502*);
 void cpuReset (c6502*);
+
+// Address Modes
+uint8_t immediate();
+uint8_t zeropage();
+uint8_t zeropageX();
+uint8_t absolute();
+uint8_t absoluteX();
+uint8_t absoluteY();
+uint8_t indirectX();
+uint8_t indirectY();
