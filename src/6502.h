@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+// TEMP MEMORY THING TO BE ABLE TO TEST
 const uint MEMSIZE = 128;
 
 uint8_t memory[MEMSIZE];
@@ -21,13 +22,18 @@ struct c6502 {
 // Basic CPU Functions
 void cpuRun   (c6502*);
 void cpuReset (c6502*);
+void incProgramCounter();
+
 
 // Address Modes
-uint8_t immediate();
-uint8_t zeropage();
-uint8_t zeropageX();
-uint8_t absolute();
-uint8_t absoluteX();
-uint8_t absoluteY();
-uint8_t indirectX();
-uint8_t indirectY();
+uint8_t immediate(uint16_t addr);
+uint8_t zeropage(uint16_t addr);
+uint8_t zeropageX(uint16_t addr);
+uint8_t absolute(uint16_t addr);
+uint8_t absoluteX(uint16_t addr);
+uint8_t absoluteY(uint16_t addr);
+uint8_t indirectX(uint16_t addr);
+uint8_t indirectY(uint16_t addr);
+
+// Debug
+void dumpVals();
