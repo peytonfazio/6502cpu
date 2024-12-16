@@ -20,19 +20,16 @@ void cpuReset(c6502* cpu) {
     // reset all values
 }
 
-uint8_t immediate(uint16_t addr) {
+uint8_t immediate() {
     incProgramCounter();
-    dataBus = read(addressBus);
     return dataBus;
 }
 
-uint8_t absolute(uint16_t addr) {
-    incProgramCounter();
-    dataBus = read(addressBus); 
+uint8_t absolute() {
+    incProgramCounter(); 
     uint8_t LBYTE = dataBus;
     
     incProgramCounter();
-    dataBus = read(addressBus);
     uint8_t HBYTE = dataBus;
 
     uint16_t fullAddress = LBYTE + (HBYTE << 8);
@@ -42,7 +39,22 @@ uint8_t absolute(uint16_t addr) {
     return dataBus;
 }
 
+uint8_t zeropage() {
+    incProgramCounter();
+
+    addressBus = 0;
+    addressBus += dataBus;
+
+    dataBus = read(addressBus);
+    return dataBus;
+}
+
+uint8_t absoluteX() {
+
+}
+
 void incProgramCounter() {
     programCounter++;
     addressBus = programCounter;
+    dataBus = read(addressBus);
 }
