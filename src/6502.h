@@ -19,9 +19,9 @@ struct c6502 {
 };
 
 // Basic CPU Functions
-void cpuRun   (struct c6502*);
-void cpuReset (struct c6502*);
-void incProgramCounter(struct c6502*);
+void cpuRun   (struct c6502* cpu);
+void cpuReset (struct c6502* cpu);
+void incProgramCounter(struct c6502* cpu);
 
 // these are just for reference at the moment
 // Address Modes
