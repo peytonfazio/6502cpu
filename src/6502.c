@@ -1,60 +1,70 @@
+#include "6502.h"
+
 // Read Write funcs for operation
 uint8_t read(uint16_t addr)                { return memory[addr]; }
 void    write(uint16_t addr, uint8_t data) { memory[addr] = data; }
 
-void cpuRun(c6502* cpu) {
+uint8_t immediate(struct c6502* cpu) {
+    incProgramCounter(cpu);
+    return cpu->dataBus;
+}
+
+uint8_t absolute(struct c6502* cpu) {
+    incProgramCounter(cpu); 
+    uint8_t lbyte = cpu->dataBus;
+    
+    incProgramCounter(cpu);
+    uint8_t hbyte = cpu->dataBus;
+
+    uint16_t fullAddress = lbyte + (hbyte << 8);
+    cpu->addressBus = fullAddress;
+    cpu->dataBus = read(cpu->addressBus);
+
+    return cpu->dataBus;
+}
+
+uint8_t zeropage(struct c6502* cpu) {
+    incProgramCounter(cpu);
+
+    cpu->addressBus = 0;
+    cpu->addressBus += cpu->dataBus;
+
+    cpu->dataBus = read(cpu->addressBus);
+    return cpu->dataBus;
+}
+
+uint8_t zeropageX(struct c6502* cpu) {
+    cpu->dataBus = zeropage(cpu);
+    cpu->dataBus + cpu->regX;
+    return cpu->dataBus;
+}
+
+void cpuRun(struct c6502* cpu) {
     // TODO: 
     // start the program counter moving and data reading/writing
     // read at program counter get instruction
     // function based on address mode
     
-    while (programCounter < MEMSIZE) {
-        dataBus = read(addressBus);
+    while (cpu->programCounter < MEMSIZE) {
+        cpu->dataBus = read(cpu->addressBus);
         // do functions
-        incProgramCounter();
+        incProgramCounter(cpu);
 
     }
 }
-void cpuReset(c6502* cpu) { 
+void cpuReset(struct c6502* cpu) { 
     // TODO: 
     // reset all values
 }
 
-uint8_t immediate() {
-    incProgramCounter();
-    return dataBus;
+
+
+void incProgramCounter(struct c6502* cpu) {
+    cpu->programCounter++;
+    cpu->addressBus = cpu->programCounter;
+    cpu->dataBus = read(cpu->addressBus);
 }
 
-uint8_t absolute() {
-    incProgramCounter(); 
-    uint8_t LBYTE = dataBus;
-    
-    incProgramCounter();
-    uint8_t HBYTE = dataBus;
-
-    uint16_t fullAddress = LBYTE + (HBYTE << 8);
-    addressBus = fullAddress;
-    dataBus = read(addressBus);
-
-    return dataBus;
-}
-
-uint8_t zeropage() {
-    incProgramCounter();
-
-    addressBus = 0;
-    addressBus += dataBus;
-
-    dataBus = read(addressBus);
-    return dataBus;
-}
-
-uint8_t absoluteX() {
-
-}
-
-void incProgramCounter() {
-    programCounter++;
-    addressBus = programCounter;
-    dataBus = read(addressBus);
+int main() {
+    return 0;
 }

@@ -1,16 +1,16 @@
 #include <stdint.h>
 
-const uint MEMSIZE = 128;
+const int MEMSIZE = 128;
 
 uint8_t memory[MEMSIZE];
 
 struct c6502 {
     //bus
     uint8_t  dataBus;
-    uint16_t addressBus = 0;
+    uint16_t addressBus;
 
     // registers
-    uint16_t programCounter = 0;
+    uint16_t programCounter;
     uint8_t  accumulator;
     uint8_t  regX;
     uint8_t  regY;
@@ -19,19 +19,19 @@ struct c6502 {
 };
 
 // Basic CPU Functions
-void cpuRun   (c6502*);
-void cpuReset (c6502*);
-void incProgramCounter();
+void cpuRun   (struct c6502*);
+void cpuReset (struct c6502*);
+void incProgramCounter(struct c6502*);
 
 // Address Modes
-uint8_t immediate();
-uint8_t zeropage();
-uint8_t zeropageX();
-uint8_t absolute();
-uint8_t absoluteX();
-uint8_t absoluteY();
-uint8_t indirectX();
-uint8_t indirectY();
+//uint8_t immediate(c6502*);
+//uint8_t zeropage(c6502*);
+//uint8_t zeropageX(c6502*);
+//uint8_t absolute(c6502*);
+//uint8_t absoluteX(c6502*);
+//uint8_t absoluteY(c6502*);
+//uint8_t indirectX(c6502*);
+//uint8_t indirectY(c6502*);
 
 // DEBUG
 void dumpVals();
