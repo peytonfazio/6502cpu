@@ -23,6 +23,7 @@ void cpuRun   (struct c6502*);
 void cpuReset (struct c6502*);
 void incProgramCounter(struct c6502*);
 
+// these are just for reference at the moment
 // Address Modes
 //uint8_t immediate(c6502*);
 //uint8_t zeropage(c6502*);

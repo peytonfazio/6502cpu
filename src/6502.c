@@ -34,10 +34,50 @@ uint8_t zeropage(struct c6502* cpu) {
 }
 
 uint8_t zeropageX(struct c6502* cpu) {
-    cpu->dataBus = zeropage(cpu);
-    cpu->dataBus + cpu->regX;
+    incProgramCounter(cpu);
+
+    cpu->addressBus = 0;
+    cpu->addressBus += cpu->dataBus + cpu->regX;
+
+    cpu->dataBus = read(cpu->addressBus);
     return cpu->dataBus;
 }
+
+uint8_t zeropageY(struct c6502* cpu) {
+    incProgramCounter(cpu);
+
+    cpu->addressBus = 0;
+    cpu->addressBus += cpu->dataBus + cpu->regY;
+
+    cpu->dataBus = read(cpu->addressBus);
+    return cpu->dataBus;
+}
+
+uint8_t absoluteX(struct 6502* cpu) {
+    incProgramCounter(cpu); 
+    uint8_t lbyte = cpu->dataBus;
+    
+    incProgramCounter(cpu);
+    uint8_t hbyte = cpu->dataBus;
+
+    uint16_t fullAddress = lbyte + (hbyte << 8);
+    cpu->addressBus = fullAddress + cpu->regX;
+    cpu->dataBus = read(cpu->addressBus);
+}
+
+uint8_t absoluteY(struct 6502* cpu) {
+    incProgramCounter(cpu); 
+    uint8_t lbyte = cpu->dataBus;
+    
+    incProgramCounter(cpu);
+    uint8_t hbyte = cpu->dataBus;
+
+    uint16_t fullAddress = lbyte + (hbyte << 8);
+    cpu->addressBus = fullAddress + cpu->regY;
+    cpu->dataBus = read(cpu->addressBus);
+}
+
+
 
 void cpuRun(struct c6502* cpu) {
     // TODO: 
@@ -65,6 +105,3 @@ void incProgramCounter(struct c6502* cpu) {
     cpu->dataBus = read(cpu->addressBus);
 }
 
-int main() {
-    return 0;
-}
