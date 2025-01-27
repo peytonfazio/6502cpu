@@ -4,6 +4,7 @@
 uint8_t read(uint16_t addr)                { return memory[addr]; }
 void    write(uint16_t addr, uint8_t data) { memory[addr] = data; }
 
+// ADDRESSING MODES
 uint8_t immediate(struct c6502* cpu) {
     incProgramCounter(cpu);
     return cpu->dataBus;
@@ -63,6 +64,8 @@ uint8_t absoluteX(struct c6502* cpu) {
     uint16_t fullAddress = lbyte + (hbyte << 8);
     cpu->addressBus = fullAddress + cpu->regX;
     cpu->dataBus = read(cpu->addressBus);
+
+    return cpu->dataBus
 }
 
 uint8_t absoluteY(struct c6502* cpu) {
@@ -75,9 +78,76 @@ uint8_t absoluteY(struct c6502* cpu) {
     uint16_t fullAddress = lbyte + (hbyte << 8);
     cpu->addressBus = fullAddress + cpu->regY;
     cpu->dataBus = read(cpu->addressBus);
+
+    return cpu->dataBus;
 }
 
+uint16_t indirect(struct c6502* cpu) {
+    incProgramCounter(cpu); 
+    uint8_t lbyte = cpu->dataBus;
+    
+    incProgramCounter(cpu);
+    uint8_t hbyte = cpu->dataBus;
 
+    uint16_t fullAddress = lbyte + (hbyte << 8);
+    cpu->addressBus = fullAddress;
+    cpu->dataBus = read(cpu->addressBus);
+
+    uint8_t indlByte = cpu->dataBus;
+
+    cpu->addressBus += 1;
+    cpu->dataBus = read(cpu->addressBus);
+
+    uint8_t indhByte = cpu->dataBus;
+
+    uint16_t indFullAddress = indlbyte + (indhbyte << 8);
+
+    return indFullAddress;
+}
+
+uint16_t indirectX(struct c6502* cpu) {
+    incProgramCounter(cpu);
+
+    cpu->addressBus = 0;
+    cpu->addressBus += cpu->dataBus + cpu->regX;
+
+    cpu->dataBus = read(cpu->addressBus);
+
+    uint8_t indlByte = cpu->dataBus;
+
+    cpu->addressBus += 1;
+    cpu->dataBus = read(cpu->addressBus);
+
+    uint8_t indhByte = cpu->dataBus;
+
+    uint16_t indFullAddress = indlbyte + (indhbyte << 8);
+
+    return indFullAddress;
+
+}
+
+uint16_t indirectY(struct c6502* cpu) {
+    incProgramCounter(cpu); 
+    uint8_t lbyte = cpu->dataBus;
+    
+    incProgramCounter(cpu);
+    uint8_t hbyte = cpu->dataBus;
+
+    uint16_t fullAddress = lbyte + (hbyte << 8);
+    cpu->addressBus = fullAddress;
+    cpu->dataBus = read(cpu->addressBus);
+
+    uint8_t indlByte = cpu->dataBus;
+
+    cpu->addressBus += 1;
+    cpu->dataBus = read(cpu->addressBus);
+
+    uint8_t indhByte = cpu->dataBus;
+
+    uint16_t indFullAddress = indlbyte + (indhbyte << 8);
+
+    return indFullAddress + cpu->regY;
+}
 
 void cpuRun(struct c6502* cpu) {
     // TODO: 
