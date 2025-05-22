@@ -27,7 +27,6 @@ void incProgramCounter(struct c6502* cpu) {
     cpu->programCounter++;
     cpu->addressBus = cpu->programCounter;
     cpu->dataBus = read(cpu->addressBus);
-    dumpVals(cpu);
 }
 
 void dumpVals(struct c6502* cpu) {

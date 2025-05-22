@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "memory.h"
+#include <stdio.h>
 
 struct c6502 {
     //bus
@@ -137,17 +138,19 @@ static inline uint8_t indirectX(struct c6502* cpu) {
     cpu->addressBus += cpu->dataBus + cpu->regX;
 
     cpu->dataBus = read(cpu->addressBus);
-
+    printf("\ndatabus LL: %X\n", cpu->dataBus);
     uint8_t indlByte = cpu->dataBus;
 
     cpu->addressBus += 1;
+    printf("\naddress bus: %X\n", read(0x84));
     cpu->dataBus = read(cpu->addressBus);
-
+    printf("\ndatabus LL + 1: %X\n", cpu->dataBus);
     uint8_t indhByte = cpu->dataBus;
 
     uint16_t indFullAddress = indlByte + (indhByte << 8);
-    
+     
     cpu->dataBus = read(indFullAddress);
+    //dumpVals(cpu);
     return cpu->dataBus;
 
 }
