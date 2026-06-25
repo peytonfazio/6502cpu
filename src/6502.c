@@ -8,12 +8,13 @@ void cpuRun(struct c6502* cpu) {
     // start the program counter moving and data reading/writing
     // read at program counter get instruction
     // function based on address mode
-    
     while (cpu->programCounter < MEMORY.size) {
-	cpu->dataBus = read(cpu->addressBus);
-        dumpVals(cpu);
+
+	    cpu->dataBus = read(cpu->addressBus);
         struct bindIns current = instructions[cpu->dataBus];
-	current.ins(current.addr(cpu), cpu);
+        // seg fault here
+	    current.ins(current.addr(cpu), cpu);
+        dumpVals(cpu);
         incProgramCounter(cpu);
     }
 }

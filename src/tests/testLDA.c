@@ -1,5 +1,5 @@
-#include "memory.h"
-#include "6502.h"
+#include "../memory.h"
+#include "../6502.h"
 
 int main() {
     
@@ -8,9 +8,12 @@ int main() {
     for(int i = 0; i < MEMORY.size; ++i) {
         write(i, 0);
     }
-
+    
+    cpu.addressBus = 0;
+    cpu.programCounter = 0;
     cpu.regX = 3;
     cpu.regY = 4;
+    
 
 write(0x00, 0xA9); write(0x01, 0x01);  // LDA #$01 → A=1
 
@@ -40,6 +43,7 @@ write(0x65, 0x71); write(0x66, 0x00);  // Pointer to $0071
 write(0x75, 0x08);                      // → A=8
 
     cpuRun(&cpu);
+
 
     return 0;
 }
